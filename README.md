@@ -993,6 +993,42 @@ a docker container, with a proper SSL certificate served over HTTPS:
 
 <img src="./assets/linode_ss_26.png" />
 
+### Using Cron To Automate Renewal Of SSL Certs
+
+You may have noticed that during our sign up using Certbot that the expiration
+date for our SSL certs is around 2 months from now. SSL Certs need to be
+reauthenticated via an SSL Authority like LetsEncrypt every couple months as a
+security precatuion. Many developers find this process tedious, so I have
+provided instructions below on how to automate renewal of SSL certificates via
+the UNIX command line tool, `cron`.
+
+We'll schedule first do a dry run of the renewal process to be sure it works as
+expected:
+
+```sh
+sudo certbot renew --dry-run --agree-tos
+```
+
+Once you've confirmed that a dry run of our renewal process is completed as
+expected, we can schedule a cronjob by editing our crontab file like so:
+
+```sh
+sudo crontab -e
+```
+
+This will open up either `nano` or `vim` in which you can simply append the
+following line:
+
+```
+12 3 * * *   certbot renew >> /var/log/letsencrypt/renew.log
+```
+
+This will schedule an auto renewal of our ssl certificate every day at 3:12AM,
+and log the output of running our program at `/var/log/letsencrypt//renew.log`.
+This simple process will automate away the necessity to manual renew our SSL
+certificates, which can be very helpful if we have multiple SSL certificates to
+renew for multiple websites.
+
 ### The Why
 
 Obviously, the amount of effort and configuration required to get a live
