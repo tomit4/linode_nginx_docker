@@ -431,7 +431,7 @@ that we'll have to now use `sudo` to access this file while logged in as
 sudo nano /etc/ssh/sshd_config
 ```
 
-Look for the line with the field `PasswordAuthentication` and change it from
+Look for the line with the field `PermitRootLogin` and change it from
 `yes` to `no`.
 
 We'll now use Debian's native init system, systemd, to restart the ssh service
